@@ -1,9 +1,5 @@
 package es.pablouser1.lightertv
 
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.content.pm.ResolveInfo
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.ui.Modifier
@@ -24,6 +21,7 @@ import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.StandardCardLayout
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
+import es.pablouser1.lightertv.helpers.Apps
 import es.pablouser1.lightertv.ui.theme.LighterTVTheme
 
 
@@ -31,11 +29,8 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalTvMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val apps = Apps.all(this)
 
-        val intent = Intent(Intent.ACTION_MAIN)
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        val apps: List<ResolveInfo> =
-            packageManager.queryIntentActivities(intent, 0)
         setContent {
             LighterTVTheme {
                 Surface(
@@ -43,24 +38,26 @@ class MainActivity : ComponentActivity() {
                     shape = RectangleShape
                 ) {
                     LazyRow(
+                        modifier = Modifier.padding(30.dp),
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         items(apps.size) {i ->
                             val app = apps[i]
                             val icon = app.loadIcon(packageManager)
+                            val name = app.activityInfo.packageName
 
                             StandardCardLayout(
-                                modifier = Modifier.size(150.dp, 120.dp),
+                                modifier = Modifier.size(180.dp, 160.dp),
                                 imageCard = { interactionSource ->
                                     CardLayoutDefaults.ImageCard(
                                         onClick = {
-                                            launchApp(app.activityInfo.packageName)
+                                            Apps.launch(name, this@MainActivity)
                                         },
                                         interactionSource = interactionSource
                                     ) {
                                         Image(
                                             painter = BitmapPainter(icon.toBitmap().asImageBitmap()),
-                                            contentDescription = null,
+                                            contentDescription = "Icon for $name app",
                                             modifier = Modifier.fillMaxWidth()
                                         )
                                     }
@@ -73,13 +70,6 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-        }
-    }
-
-    private fun launchApp(packageName: String) {
-        val intent = packageManager.getLaunchIntentForPackage(packageName)
-        if (intent != null) {
-            startActivity(intent)
         }
     }
 }
