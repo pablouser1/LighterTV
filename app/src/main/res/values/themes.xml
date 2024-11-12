@@ -1,0 +1,4 @@
+<resources>
+
+    <style name="Theme.LighterTV" parent="Theme.AppCompat.DayNight.NoActionBar" />
+</resources>
