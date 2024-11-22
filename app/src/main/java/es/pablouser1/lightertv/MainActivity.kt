@@ -12,6 +12,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Surface
+import es.pablouser1.lightertv.helpers.Storage
 import es.pablouser1.lightertv.ui.theme.LighterTVTheme
 import es.pablouser1.lightertv.ui.views.HomeView
 
@@ -22,13 +23,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val storage = Storage(dataStore)
+
         setContent {
             LighterTVTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     shape = RectangleShape
                 ) {
-                    HomeView(this@MainActivity, dataStore)
+                    HomeView(this@MainActivity, storage)
                 }
             }
         }

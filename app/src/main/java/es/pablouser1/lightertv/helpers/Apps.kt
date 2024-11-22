@@ -9,7 +9,7 @@ class Apps {
     companion object {
         fun all(context: Context): List<ResolveInfo> {
             val intent = Intent(Intent.ACTION_MAIN)
-            intent.addCategory(Intent.CATEGORY_LAUNCHER)
+            intent.addCategory(Intent.CATEGORY_LEANBACK_LAUNCHER)
             return context.packageManager.queryIntentActivities(intent, 0)
         }
 
